@@ -4,8 +4,14 @@ var socket = io();
 
 console.log(name + ' wants to join '+ room);
 
+jQuery('.room-name').text(room);
+
 socket.on('connect', function() {
 	console.log('connected to socket.io server');
+	socket.emit('joinRoom', {
+		name: name,
+		room: room
+	});
 });
 
 socket.on('message', function (message) {
@@ -15,7 +21,7 @@ socket.on('message', function (message) {
 	console.log('New Message: ');
 	console.log(message.text);
 
-	$message.append('<p><strong>' + message.name + ' ' + momentTimestamp.local().format('MMM Do YYYY, h:mma') + ': </strong></p>');
+	$message.append('<p><strong>' + message.name  + ' sent on ' + momentTimestamp.local().format('MMM Do YYYY@h:mma') + ': </strong></p>');
 	$message.append('</p>' + message.text + '</p>');
 });
 
